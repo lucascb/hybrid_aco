@@ -1,0 +1,29 @@
+{
+  "instance" : "A-n33-k5",
+  "optimum" : 661.0,
+  "parameters" : {
+    "max-iter" : 100,
+    "num-elite-ants" : 6,
+    "beta" : 2,
+    "pertubation-ratio" : 0.7,
+    "lambda" : 0.95,
+    "initial-temperature" : 5.0,
+    "sa-max-tries" : 250,
+    "initial-trail" : 0.5,
+    "max-best-so-far-not-improved" : 5,
+    "num-ants" : 33,
+    "max-runtime" : 600,
+    "max-best-unchanged" : 33,
+    "evaporation-rate" : 0.9,
+    "tabu-size" : 3,
+    "alpha" : 1
+  },
+  "solution" : {
+    "tour" : [ 0, 10, 30, 25, 27, 12, 4, 0, 28, 18, 31, 1, 21, 14, 19, 11, 0, 2, 32, 13, 8, 7, 26, 5, 20, 0, 29, 16, 3, 9, 17, 15, 0, 24, 6, 23, 22, 0 ],
+    "cost" : 669.0
+  },
+  "start" : "13-05-2018 20:09:34",
+  "end" : "13-05-2018 20:10:10",
+  "elapsed-time" : 35.272327084,
+  "dev" : 1.2102874432677762
+}

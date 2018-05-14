@@ -60,7 +60,7 @@
 (defn construct-solutions
   "Construct the solution for each ant of the colony"
   [heuristics pheromones]
-  (println "Running ACO...")
+  ;(println "Running ACO...")
   (let [probs (build-probabilities-matrix heuristics pheromones)]
     (map construct-ant-solution (repeat *num-ants* probs))))
 

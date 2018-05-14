@@ -52,8 +52,10 @@
 (defn local-search
   "Perform a local search on the current solution"
   [solution operations]
+  ;(println "Performing local search")
   (let [new-sol (search-neighborhood solution operations)]
-    (if (>= (:cost new-sol) (:cost solution))
+    (if (or (not (solution/feasible? new-sol))
+            (>= (:cost new-sol) (:cost solution)))
       solution
       (recur new-sol operations))))
 

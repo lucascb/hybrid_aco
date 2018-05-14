@@ -1,4 +1,4 @@
-(defproject hybrid-aco "0.1.0-SNAPSHOT"
+(defproject cvrplib-solver "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -7,7 +7,8 @@
                  [net.mikera/vectorz-clj "0.47.0"]
                  [cheshire "5.8.0"]
                  [random-seed "1.0.0"]
-                 [amalloy/ring-buffer "1.2.1"]]
+                 [amalloy/ring-buffer "1.2.1"]
+                 [org.clojure/tools.cli "0.3.7"]]
   :main ^:skip-aot hybrid-aco.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

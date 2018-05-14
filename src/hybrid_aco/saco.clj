@@ -21,8 +21,8 @@
   ;(println)
   ;(println "ITER =" iter)
   ;(println best-so-far)
-  (if (or (= (:cost best-so-far) *optimum*)
-          (= iter *max-iter*))
+  (if (or (= iter *max-iter*)
+          (termination-criteria-reached? best-so-far))
     best-so-far
     (let [ants1 (aco/construct-solutions heuristics pheromones)
           ants2 (map #(search/local-search % operations) ants1)
@@ -46,11 +46,12 @@
                         pheromones1)
 
           improve-with-sa? (= cnt-best-so-far *max-best-so-far-not-improved*)
-          time1 (System/nanoTime)
+          ;_ (cond improve-with-sa? (println "Running SA..."))
+          ;time1 (System/nanoTime)
           [best-so-far2 pheromones3] (if improve-with-sa?
                                        (sa/improve-solution best-so-far1 pheromones2)
-                                       [best-so-far1 pheromones2])
-          time2 (System/nanoTime)]
+                                       [best-so-far1 pheromones2])]
+          ;time2 (System/nanoTime)]
       ;(cond improve-with-sa? (println "SA took" (/ (- time2 time1) 1e9) "seconds"))
       (recur best-so-far2
              best-ant

@@ -2,12 +2,13 @@
     "alpha": 1,
     "beta": 2,
     "evaporation_rate": 0.1,
-    "pertubation_rate": 0.7,
+    "pertubation_ratio": 0.7,
     "num_elite_ants": 6,
     "initial_trail": 0.5,
     "initial_temperature": 5.0,
     "lambda": 0.95,
     "tabu_size": 3,
     "max_iter": 100,
-    "max_best_so_far_not_improved": 5 
+    "max_best_so_far_not_improved": 5,
+    "max_runtime": 600
 }

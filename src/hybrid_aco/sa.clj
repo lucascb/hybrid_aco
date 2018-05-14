@@ -21,7 +21,8 @@
   ;(println "CURRENT-TEMP:" current-temp)
   ;(Thread/sleep 1000)
   ; If current temperature reached below final temperature
-  (if (<= current-temp *final-temperature*)
+  (if (or (<= current-temp *final-temperature*)
+          (termination-criteria-reached? best-so-far))
     ; return the best-so-far solution and the pheromones updated
     [best-so-far pheromones]
     ; otherwise perfom a search in the neighborhood of current-solution
@@ -66,7 +67,7 @@
 (defn improve-solution
   "Improve the current solution"
   [solution pheromones]
-  (println "Running SA...")
+  ;(println "Running SA...")
   (simulated-annealing solution ; Current solution
                        solution ; Best-so-far solution
                        pheromones ; Current pheromone trail

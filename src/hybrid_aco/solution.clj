@@ -40,7 +40,7 @@
   "Calculate the total distance of the tour i.e. the cost of the solution"
   [tour]
   (let [dists (map #(matrix/mget *distances* %1 %2) tour (rest tour))]
-    (matrix/esum dists)))
+    (double (matrix/esum dists))))
 
 (defn calculate-load
   "Calculate total load of the tour for the vehicle"
@@ -56,5 +56,6 @@
 (defn create-solution
   ""
   [tour]
-  (struct Solution tour (objetive-function tour)))
+  (let [t (dedupe tour)] ; Remove consecutive duplicates, if any
+    (struct Solution t (objetive-function t))))
 

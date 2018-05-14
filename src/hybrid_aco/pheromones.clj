@@ -28,7 +28,7 @@
 (defn update-pheromones
   ""
   [pheromones elite-ants best-so-far-ant]
-  (println "Updating pheromones...")
+  ;(println "Updating pheromones...")
   (let [elites-weight (range *num-elite-ants* 0 -1)
         elites-pheromones (map #(release-ant-pheromone %1 %2)
                                elite-ants
@@ -41,10 +41,10 @@
 (defn pertubate-pheromones
   "Apply the pertubation on the pheromones to avoid solution stagnation"
   [pheromones]
-  (println "Pertubating pheromones...")
-  (let [non-pertubation-ratio (- 1 *pertubation-rate*)
+  ;(println "Pertubating pheromones...")
+  (let [non-pertubation-ratio (- 1 *pertubation-ratio*)
         average (/ (matrix/esum pheromones) (matrix/ecount pheromones))
-        pertubation (* *pertubation-rate* average)]
+        pertubation (* *pertubation-ratio* average)]
     (matrix/emap #(+ pertubation (* non-pertubation-ratio %)) pheromones)))
 
 

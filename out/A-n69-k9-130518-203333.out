@@ -1,0 +1,29 @@
+{
+  "instance" : "A-n69-k9",
+  "optimum" : 1159.0,
+  "parameters" : {
+    "max-iter" : 100,
+    "num-elite-ants" : 6,
+    "beta" : 2,
+    "pertubation-ratio" : 0.7,
+    "lambda" : 0.95,
+    "initial-temperature" : 5.0,
+    "sa-max-tries" : 276,
+    "initial-trail" : 0.5,
+    "max-best-so-far-not-improved" : 5,
+    "num-ants" : 69,
+    "max-runtime" : 600,
+    "max-best-unchanged" : 69,
+    "evaporation-rate" : 0.9,
+    "tabu-size" : 3,
+    "alpha" : 1
+  },
+  "solution" : {
+    "tour" : [ 0, 58, 13, 35, 45, 20, 41, 59, 68, 12, 0, 19, 23, 22, 24, 0, 54, 37, 10, 17, 32, 50, 43, 0, 62, 56, 36, 1, 48, 16, 0, 27, 65, 55, 60, 4, 47, 14, 34, 0, 18, 53, 64, 61, 21, 67, 7, 0, 31, 2, 33, 49, 9, 30, 51, 6, 3, 15, 44, 66, 0, 52, 39, 8, 38, 40, 29, 0, 28, 57, 42, 25, 11, 63, 46, 5, 26, 0 ],
+    "cost" : 1190.0
+  },
+  "start" : "13-05-2018 20:33:33",
+  "end" : "13-05-2018 20:34:54",
+  "elapsed-time" : 81.666055663,
+  "dev" : 2.6747195858498705
+}

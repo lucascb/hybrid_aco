@@ -1,0 +1,29 @@
+{
+  "instance" : "E-n22-k4",
+  "optimum" : 375.0,
+  "parameters" : {
+    "max-iter" : 100,
+    "num-elite-ants" : 6,
+    "beta" : 2,
+    "pertubation-ratio" : 0.7,
+    "lambda" : 0.95,
+    "initial-temperature" : 5.0,
+    "sa-max-tries" : 250,
+    "initial-trail" : 0.5,
+    "max-best-so-far-not-improved" : 5,
+    "num-ants" : 22,
+    "max-runtime" : 600,
+    "max-best-unchanged" : 22,
+    "evaporation-rate" : 0.9,
+    "tabu-size" : 3,
+    "alpha" : 1
+  },
+  "solution" : {
+    "tour" : [ 0, 15, 18, 20, 21, 17, 14, 0, 13, 19, 16, 0, 10, 7, 5, 9, 12, 0, 8, 6, 2, 1, 3, 4, 11, 0 ],
+    "cost" : 382.0
+  },
+  "start" : "13-05-2018 20:18:07",
+  "end" : "13-05-2018 20:18:33",
+  "elapsed-time" : 25.872930241,
+  "dev" : 1.866666666666667
+}
