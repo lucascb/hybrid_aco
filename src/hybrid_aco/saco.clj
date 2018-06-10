@@ -4,7 +4,8 @@
             [hybrid-aco.aco :as aco]
             [hybrid-aco.local-search :as search]
             [hybrid-aco.sa :as sa]
-            [clojure.core.matrix :as matrix]))
+            [clojure.core.matrix :as matrix]
+            [taoensso.timbre :as log]))
 
 (def operations [search/make-2opt-move search/make-swap-move])
 (def heuristic (fn [dist] (/ 1.0 (+ dist 0.1))))
@@ -18,18 +19,19 @@
   ""
   [best-so-far last-best iter cnt-best cnt-best-so-far heuristics pheromones]
   ;(Thread/sleep 1000)
-  ;(println)
-  ;(println "ITER =" iter)
-  ;(println best-so-far)
+  ;;(println "ITER =" iter)
+  ;;(println best-so-far)
+  #_(log/info "ITER =" iter "BEST-SO-FAR =" (:cost best-so-far))
   (if (or (= iter *max-iter*)
           (termination-criteria-reached? best-so-far))
     best-so-far
     (let [ants1 (aco/construct-solutions heuristics pheromones)
           ants2 (map #(search/local-search % operations) ants1)
-
           ants-ranked (sort-by :cost ants2)
+          ;_ (log/info "ACO BEST =" (:cost (first ants-ranked)) ", WORST =" (:cost (last ants-ranked)))
           best-ant (first ants-ranked)
           elite-ants (take *num-elite-ants* ants-ranked)
+
           best-ant-changed? (not= best-ant last-best)
           best-so-far1 (if (< (:cost best-ant) (:cost best-so-far))
                             best-ant
@@ -51,8 +53,6 @@
           [best-so-far2 pheromones3] (if improve-with-sa?
                                        (sa/improve-solution best-so-far1 pheromones2)
                                        [best-so-far1 pheromones2])]
-          ;time2 (System/nanoTime)]
-      ;(cond improve-with-sa? (println "SA took" (/ (- time2 time1) 1e9) "seconds"))
       (recur best-so-far2
              best-ant
              (inc iter)

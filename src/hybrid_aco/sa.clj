@@ -4,7 +4,9 @@
             [hybrid-aco.solution :as solution]
             [hybrid-aco.pheromones :as pheromones]
             [clojure.core.matrix :as matrix]
-            [amalloy.ring-buffer :as ring]))
+            [amalloy.ring-buffer :as ring]
+            [taoensso.timbre :as log]
+            [random-seed.core :as random]))
 
 (def operations [search/make-swap-move
                  search/make-2opt-move
@@ -20,30 +22,33 @@
   ;(println "TRIES-CNT:" tries-cnt)
   ;(println "CURRENT-TEMP:" current-temp)
   ;(Thread/sleep 1000)
-  ; If current temperature reached below final temperature
+  ;; If current temperature reached below final temperature
+  #_(cond *debug* (log/debug "TRIES-CNT =" tries-cnt
+                           ", CURRENT-TEMP =" current-temp
+                           ", COST =" (:cost best-so-far)))
   (if (or (<= current-temp *final-temperature*)
           (termination-criteria-reached? best-so-far))
-    ; return the best-so-far solution and the pheromones updated
+    ;; return the best-so-far solution and the pheromones updated
     [best-so-far pheromones]
-    ; otherwise perfom a search in the neighborhood of current-solution
+    ;; otherwise perfom a search in the neighborhood of current-solution
     (let [new-solution (search/search-neighborhood current-solution operations)
           max-tries-reached? (= tries-cnt *sa-max-tries*)]
       ;(println "NEW-SOLUTION:" new-solution)
-      ; If new-solution is not feasible or tabu-list contains new-solution
+      ;; If new-solution is not feasible or tabu-list contains new-solution
       (if (or (not (solution/feasible? new-solution))
               (.contains tabu-list new-solution))
-        ; update tries-cnt and current-temperature if necessary, then recur to try again
+        ;; update tries-cnt and current-temperature if necessary, then recur to try again
         (recur current-solution
                best-so-far
                pheromones
                tabu-list
                (if max-tries-reached? 0 (inc tries-cnt))
                (if max-tries-reached? (* *lambda* current-temp) current-temp))
-        ; otherwise recur processing the solution found and updating other parameters
+        ;; otherwise recur processing the solution found and updating other parameters
         (let [delta (- (:cost new-solution) (:cost current-solution))
               accept-as-current? (or (< delta 0)
-                                     (< (rand) (Math/pow Math/E
-                                                         (- (/ delta current-temp)))))
+                                     (< (random/rand)
+                                        (Math/pow Math/E (- (/ delta current-temp)))))
               accept-as-best-so-far? (< (:cost new-solution) (:cost best-so-far))]
           ;(println "IMPROVED CURRENT?" accept-as-current?)
           ;(println "IMPROVED BEST?" accept-as-best-so-far?)
@@ -60,14 +65,14 @@
                           (pheromones/release-ant-pheromone new-solution 12))
              pheromones)
            (into tabu-list '(new-solution)) ; Add new-solution to tabu-list
-           ; If maximum number of tries in the same temperature is reached, reset tries-cnt to zero and decrease temperature level:
+           ;; If maximum number of tries in the same temperature is reached, reset tries-cnt to zero and decrease temperature level:
            (if max-tries-reached? 0 (inc tries-cnt))
            (if max-tries-reached? (* *lambda* current-temp) current-temp)))))))
 
 (defn improve-solution
   "Improve the current solution"
   [solution pheromones]
-  ;(println "Running SA...")
+  ;(cond *debug* (log/debug "Started SA"))
   (simulated-annealing solution ; Current solution
                        solution ; Best-so-far solution
                        pheromones ; Current pheromone trail

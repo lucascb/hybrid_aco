@@ -10,5 +10,7 @@
     "tabu_size": 3,
     "max_iter": 100,
     "max_best_so_far_not_improved": 5,
-    "max_runtime": 600
+    "max_runtime": 600,
+    "debug": true,
+    "seed": 1
 }

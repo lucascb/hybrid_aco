@@ -1,4 +1,5 @@
-(ns hybrid-aco.utils)
+(ns hybrid-aco.utils
+  (:require [random-seed.core :as random]))
 
 ; Taken from github.com/bodil/unpredictable. All credits to bodil.
 
@@ -8,7 +9,7 @@
   (let [seq (vec seq) n (int n)]
     (loop [res #{}]
       (if (= n (count res)) res
-          (let [item (rand-nth seq)]
+          (let [item (random/rand-nth seq)]
             (recur (conj res item)))))))
 
 (defn rand-map

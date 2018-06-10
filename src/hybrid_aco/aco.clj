@@ -2,7 +2,9 @@
   (:use [hybrid-aco.instance])
   (:require [clojure.core.matrix :as matrix]
             [hybrid-aco.parameters :as params]
-            [hybrid-aco.solution :as solution]))
+            [hybrid-aco.solution :as solution]
+            [random-seed.core :as random]
+            [taoensso.timbre :as log]))
 
 (matrix/set-current-implementation :vectorz)
 
@@ -31,7 +33,7 @@
   [last-customer customers probs]
   (let [cust-probs (build-customers-probabilities customers last-customer probs)
         wheel (build-ant-wheel customers cust-probs)
-        r (rand)] ; Generates a random number between the interval [0, 1.0)
+        r (random/rand)] ; Generates a random number between the interval [0, 1.0)
     (some #(cond (> (:probability %) r) (:customer %)) wheel)))
 
 (defn- construct-ant-tour
@@ -60,7 +62,7 @@
 (defn construct-solutions
   "Construct the solution for each ant of the colony"
   [heuristics pheromones]
-  ;(println "Running ACO...")
+  ;(cond *debug* (log/debug "Started ACO"))
   (let [probs (build-probabilities-matrix heuristics pheromones)]
     (map construct-ant-solution (repeat *num-ants* probs))))
 

@@ -4,7 +4,6 @@
 import glob
 import json
 
-# Alg 2
 table = []
 alg1 = []
 alg2 = []
@@ -21,21 +20,25 @@ for filename in glob.glob("/home/lucas/Documents/tcc/out/*.out"):
 for instance1 in alg1:
     for instance2 in alg2:
         if instance1["instance"] == instance2["instance"]:
+            dev1 = instance1["dev"]
             dev2 = ((instance2["total-cost"] - instance2["optimal"]) / instance2["optimal"]) * 100.0
             if instance1["dev"] >= 0 and dev2 >= 0:
+                b1 = "\\textbf{{{:.1f}}}".format(dev1) if dev1 <= dev2 else "{:.1f}".format(dev1)
+                b2 = "\\textbf{{{:.1f}}}".format(dev2) if dev2 <= dev1 else "{:.1f}".format(dev2)
+                d1 = "\\underline{{{}}}".format(b1) if dev1 == 0.0 else b1
+                d2 = "\\underline{{{}}}".format(b2) if dev2 == 0.0 else b2
                 table_row = " & ".join([
                     instance1["instance"],
                     str(instance1["optimum"]),
                     str(instance1["solution"]["cost"]),
-                    str("{:.1f}".format(instance1["dev"])),
+                    d1,
                     str("{:.1f}".format(instance1["elapsed-time"])),
                     str(instance2["total-cost"]),
-                    str("{:.1f}".format(dev2)),
+                    d2,
                     str("{:.1f}".format(instance2["elapsed-time"]))
                 ]) + " \\\\"
                 table.append(table_row)
 
-#print(table)
 table.sort()
-with open("table_1.tex", "w") as f:
+with open("tabela_resultados.tex", "w") as f:
     f.write("\n".join(table))

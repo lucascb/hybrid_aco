@@ -1,14 +1,15 @@
 (ns hybrid-aco.local-search
   (:use [hybrid-aco.instance])
   (:require [hybrid-aco.solution :as solution]
-            [hybrid-aco.utils :as utils]))
+            [hybrid-aco.utils :as utils]
+            [random-seed.core :as random]))
 
 (defn make-swap-move
   "Selects two customers randomly and swaps their position"
   [tour]
   (let [customers (range 1 *dimension*)
-        customer1 (rand-nth customers)
-        customer2 (rand-nth (remove #{customer1} customers))]
+        customer1 (random/rand-nth customers)
+        customer2 (random/rand-nth (remove #{customer1} customers))]
     (replace {customer1 customer2, customer2 customer1} tour)))
 
 (defn- make-inversion
@@ -18,8 +19,8 @@
   (if (< (count route) 2)
     route
     (let [route-length (count route)
-          n (rand-int (dec route-length))
-          m (rand-int (- route-length n 1))
+          n (random/rand-int (dec route-length))
+          m (random/rand-int (- route-length n 1))
           subroute1 (take n route)
           subroute2 (drop n (drop-last m route))
           subroute3 (take-last m route)]
@@ -36,16 +37,16 @@
   "Select a customer randomly and insert it in a random position"
   [tour]
   (let [customers (range 1 *dimension*)
-        customer (rand-nth customers)
+        customer (random/rand-nth customers)
         ;_ (println customer)
         new-tour (remove #{customer} tour)
-        position (rand-nth (range 1 (dec (count new-tour))))]
+        position (random/rand-nth (range 1 (dec (count new-tour))))]
     (vec (concat (take position new-tour) [customer] (drop position new-tour)))))
 
 (defn search-neighborhood
   "Select randomly one of the operations to make a move on the neighborhood"
   [solution operations]
-  (let [make-move (rand-nth operations)]
+  (let [make-move (random/rand-nth operations)]
     ;(println "Chose to perform" make-move)
     (solution/create-solution (make-move (:tour solution)))))
 

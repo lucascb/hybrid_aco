@@ -27,18 +27,17 @@
 (defn construct-edge-matrix
   "Construct the edge matrix of the solution"
   [solution]
-  (if (contains? solution :edges)
-    solution
-    (let [tour (:tour solution)
-          size (count (distinct tour))
-          edges (map vector tour (rest tour))]
-      (matrix/set-indices (matrix/new-matrix size size)
-                          edges
-                          (repeat (count edges) 1.0)))))
+  (let [tour (:tour solution)
+        size (count (distinct tour))
+        edges (map vector tour (rest tour))]
+    (matrix/set-indices! (matrix/new-matrix size size)
+                         edges
+                         (repeat (count edges) 1.0))))
 
 (defn objetive-function
   "Calculate the total distance of the tour i.e. the cost of the solution"
   [tour]
+  (swap! *evaluations* inc)
   (let [dists (map #(matrix/mget *distances* %1 %2) tour (rest tour))]
     (double (matrix/esum dists))))
 

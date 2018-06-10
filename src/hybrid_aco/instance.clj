@@ -1,7 +1,8 @@
 (ns hybrid-aco.instance
   (:require [cheshire.core :as json]
             [clojure.core.matrix :as matrix]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [taoensso.timbre :as log]))
 
 ;; Instance constants
 
@@ -10,7 +11,7 @@
 (def ^:dynamic *distances*)
 (def ^:dynamic *capacity*)
 (def ^:dynamic *demands*)
-(def ^:dynamic *optimum*)
+(def ^:dynamic *optimal*)
 
 ;; Algorithm parameters
 
@@ -38,6 +39,10 @@
 (def ^:dynamic *max-runtime*)
 (def ^:dynamic *date-start*)
 (def ^:dynamic *start*)
+(def ^:dynamic *evaluations*)
+
+(def ^:dynamic *seed*)
+(def ^:dynamic *debug*)
 
 (def file-dateformat (java.text.SimpleDateFormat. "ddMMyy-HHmmss"))
 (def result-dateformat (java.text.SimpleDateFormat. "dd-MM-yyyy HH:mm:ss"))
@@ -45,7 +50,7 @@
 (defn termination-criteria-reached?
   "Stop if runtime exceeded max-runtime or solution reached optimum"
   [best-so-far]
-  (or (= (:cost best-so-far) *optimum*)
+  (or (= (:cost best-so-far) *optimal*)
       (>= (/ (- (System/nanoTime) *start*) 1e9) *max-runtime*)))
 
 (defn- to-keyword
@@ -62,14 +67,21 @@
   ""
   [path]
   (let [files (file-seq (io/file path))
-        instances (filter #(.endsWith (str %) ".in") files)]
+        instances (filter #(.endsWith (str %) ".json") files)]
     (map read-file instances)))
 
-(defn result
+(defn calculate-dev
   ""
-  [best end date-end]
+  [best]
+  (if (zero? *optimal*)
+    {}
+    {:optimal *optimal*
+     :dev (* (/ (- (:cost best) *optimal*) *optimal*) 100)}))
+
+(defn generate-result
+  ""
+  [best elapsed-time date-end]
   {:instance *instance*
-   :optimum *optimum*
    :parameters {:num-ants *num-ants*
                 :alpha *alpha*
                 :beta *beta*
@@ -88,18 +100,23 @@
    :solution best
    :start (.format result-dateformat *date-start*)
    :end (.format result-dateformat date-end)
-   :elapsed-time (/ (- end *start*) 1e9)
-   :dev (* (/ (- (:cost best) *optimum*) *optimum*) 100)})
+   :evaluations @*evaluations*
+   :elapsed-time elapsed-time})
 
-(defn write-result
+(defn write-result!
   ""
   [best-found]
   (let [end (System/nanoTime)
         date-end (java.util.Date.)
         start-date (.format file-dateformat *date-start*)
-        fileoutput-name (str "./out/" *instance* "-" start-date ".out")]
+        fileoutput-name (str "./out/" *instance* "-" start-date ".out")
+        elapsed-time (/ (- end *start*) 1e9)]
+    (log/info "Finished instance" *instance* "in" elapsed-time "seconds")
     (spit fileoutput-name
-          (json/generate-string (result best-found end date-end)
+          (json/generate-string (merge (generate-result best-found
+                                                        elapsed-time
+                                                        date-end)
+                                       (calculate-dev best-found))
                                 {:pretty true}))))
 
 ;(def inst (read-instance (slurp "/home/lucas/Documents/tcc/hybrid-aco/resources/A-n32-k5.in")))

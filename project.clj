@@ -8,7 +8,9 @@
                  [cheshire "5.8.0"]
                  [random-seed "1.0.0"]
                  [amalloy/ring-buffer "1.2.1"]
+                 [com.taoensso/timbre "4.10.0"]
                  [org.clojure/tools.cli "0.3.7"]]
   :main ^:skip-aot hybrid-aco.core
   :target-path "target/%s"
+  :jvm-opts ["-Xmx1G"]
   :profiles {:uberjar {:aot :all}})
