@@ -1,7 +1,6 @@
 (ns hybrid-aco.aco
   (:use [hybrid-aco.instance])
   (:require [clojure.core.matrix :as matrix]
-            [hybrid-aco.parameters :as params]
             [hybrid-aco.solution :as solution]
             [random-seed.core :as random]
             [taoensso.timbre :as log]))
